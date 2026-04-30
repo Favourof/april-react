@@ -1,0 +1,15 @@
+.card {
+  background-color: yellow;
+  width: 400px;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  border: thin solid gray;
+}
+
+.circle {
+  border-radius: 50%;
+  border: thin solid black;
+  width: 300px;
+  height: 300px;
+}
