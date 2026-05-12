@@ -1,10 +1,11 @@
-function Button() {
+function Button(props) {
+    console.log(props);
+  
+    
     return (
-        <>
-            <button className="but">Log in</button>
-            <div>jdjkdqlk</div>
-            <button style={{ background: "yellow" }}>hello</button>
-        </>
+        <div>
+            <button className="but" onClick={props.alertme} style={{background:`${props.color}`}}>{props.text}</button>
+        </div>
     )
 }
 
