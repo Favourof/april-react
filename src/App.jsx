@@ -11,6 +11,7 @@ import { History } from "./DashboardPages/History";
 import { Payment } from "./DashboardPages/Payment";
 import { Settings } from "./DashboardPages/Settings";
 import { Manage } from "./DashboardPages/Manage";
+import { Product } from "./Pages/Product";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/product" element={<Product />} />
 
 
 
