@@ -1,65 +1,61 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from 'react'
 
 export const Product = () => {
-    const [products, setProduct] = useState([])
+    const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
     const [productError, setProductError] = useState('')
-
-    async function getProduct() {
+    const [retry, setRetry] = useState(false);
+    const getProduct = async () => {
         try {
             setLoading(true)
             setProductError("")
-            const response = await fetch('https://fakestoreapi.com/product')
-            console.log("response: ", response);
+            const response = await fetch('https://fakestoreapi.com/products')
+
             if (response.ok) {
                 const resJson = await response.json()
-                console.log(resJson);
-                setProduct(resJson)
-                setLoading(false)
-                console.log("product", products);
+                setProducts(resJson)
             } else {
                 setProductError("Error while fetching Products")
             }
-
-
-
         } catch (error) {
             setProductError(error.message)
-            console.log(error);
-
         } finally {
             setLoading(false)
         }
     }
 
     useEffect(() => {
-        getProduct();
-    }, [])
-
-
-
-
-
+        getProduct()
+    }, [retry])
 
     return (
-        <div>
+        <div className="product-container">
+            {productError && (
+                <div className="error-box">
+                    <h1>{productError}</h1>
+                    <button onClick={() => setRetry(!retry)}>Retry</button>
+                </div>
+            )}
 
-            {
-                productError && <h1>{productError}</h1>
-            }
+            {loading && <h1>Loading...</h1>}
 
-            {
-                loading && <h1>loading</h1>
-            }
-            {
-                products.map((product, i) => (
-                    <ul key={i}>
-                        <img src={product.image} alt={product.title} style={{ width: "100px", height: "100px" }} />
-                        <li>{product.title}</li>
-                        <li>{product.description}</li>
-                    </ul>
-                ))
-            }
+            <div className="product-grid">
+                {products.map((product) => (
+                    <div key={product.id} className="product-card">
+                        <img
+                            src={product.image}
+                            alt={product.title}
+                            className="product-image"
+                        />
+                        <h2 className="product-title">{product.title}</h2>
+                        <p className="product-description">{product.description}</p>
+                        <p className="product-price">${product.price}</p>
+                        <button className="see-more-btn">See More</button>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
+
+
