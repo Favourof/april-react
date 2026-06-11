@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+
+import { useState, useEffect } from 'react'
 
 export const Product = () => {
     const [products, setProducts] = useState([])
@@ -9,11 +10,15 @@ export const Product = () => {
         try {
             setLoading(true)
             setProductError("")
-            const response = await fetch('https://fakestoreapi.com/products')
+            // const response = await fetch('https://fakestoreapi.com/products')
+            const response = await fetch('http://localhost:4000/api/v1/product')
+
+            console.log(response);
 
             if (response.ok) {
                 const resJson = await response.json()
-                setProducts(resJson)
+                setProducts(resJson.product)
+                console.log(products);
             } else {
                 setProductError("Error while fetching Products")
             }
@@ -41,14 +46,14 @@ export const Product = () => {
 
             <div className="product-grid">
                 {products.map((product) => (
-                    <div key={product.id} className="product-card">
+                    <div key={product._id} className="product-card">
                         <img
                             src={product.image}
                             alt={product.title}
                             className="product-image"
                         />
                         <h2 className="product-title">{product.title}</h2>
-                        <p className="product-description">{product.description}</p>
+                        <p className="product-description">{product.description.slice(0, 100)}</p>
                         <p className="product-price">${product.price}</p>
                         <button className="see-more-btn">See More</button>
                     </div>

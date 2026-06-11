@@ -12,6 +12,7 @@ import { Payment } from "./DashboardPages/Payment";
 import { Settings } from "./DashboardPages/Settings";
 import { Manage } from "./DashboardPages/Manage";
 import { Product } from "./Pages/Product";
+import { AddProduct } from "./DashboardPages/AddProduct";
 
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
           <Route path="payment" element={<Payment />} />
           <Route path="settings" element={<Settings />} />
           <Route path="manage" element={<Manage />} />
+          <Route path="addproduct" element={<AddProduct />} />
+
 
 
         </Route>
