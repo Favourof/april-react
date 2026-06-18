@@ -1,36 +1,101 @@
 import { useForm } from "react-hook-form"
+import "./Form.css";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 
 export const AddProduct = () => {
-    const { handleSubmit, register, formState: { errors } } = useForm()
+    const [files, setFiles] = useState(null);
+    const [preview, setPreview] = useState(null);
+
+
+
+    const schema = z.object({
+        title: z.string().min(5, { message: "Title must be at least 5 characters long" })
+            .max(50, { message: "Title must not exceed 100 characters" }),
+
+        description: z.string().min(5, { message: "Description must be at least 5 characters long" })
+            .max(500, { message: "Description must not exceed 500 characters" }),
+        price: z.coerce
+            .number({ invalid_type_error: "Price must be a number" })
+            .positive({ message: "Price must be greater than 0" }),
+
+
+
+    })
+    const { handleSubmit, register, formState: { errors } } = useForm({ resolver: zodResolver(schema) })
     console.log(errors);
 
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0]
+        setFiles(file)
+        console.log(file);
+        if (file) {
+            setPreview(URL.createObjectURL(file))
+        }
 
-    const onSubmit = (data) => {
+    }
+
+
+
+
+
+
+    const onSubmit = async (data) => {
         console.log(data);
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2YTBhZDNjNDdiZGE3MTdiMWVmM2RhMTYiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODE3NzI3MTAsImV4cCI6MTc4MjM3NzUxMH0.LAhTqOUU3M3nnYmiBAU7rDCP4nw-_uTO6cYcy4mbzgA"
+        const formdata = new FormData()
+
+        formdata.append("title", data.title)
+        formdata.append("description", data.description)
+        formdata.append("price", data.price)
+        formdata.append("image", files)
+
+        try {
+            const product = await fetch("http://localhost:4000/api/v1/product", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formdata
+            })
+
+            if (product) {
+                const res = await product.json()
+                console.log(res);
+
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+
+
 
     }
     return (
-        <div>
-            <h1>Add Product</h1>
+        <div className="form-container">
+            <h1 className="form-title">Add Product</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-                {/* register your input into the hook by invoking the "register" function */}
-                <label>name  </label>
 
-                <input type="text" {...register("name", { required: "name is required", minLength: { value: 3, message: "name must not be less than 3 character" } })} />
-                {errors.name && <p style={{ color: "red", fontSize: "10px" }}>{errors.name.message}</p>}
-                <br /><br />
+                <label className="form-label">Title</label>
+                <input type="text" {...register("title")} className="form-input" />
+                {errors.title && <p className="form-error">{errors.title.message}</p>}
 
-                {/* include validation with required or other standard HTML validation rules */}
-                <label>Email</label>
-                <input type="email" {...register("email")} /> <br /><br />
+                <label className="form-label">Description</label>
+                <input type="text" {...register("description")} className="form-input" />
+                {errors.description && <p className="form-error">{errors.description.message}</p>}
 
-                <label> age</label>
-                <input type="number" {...register("age")} />
-                {/* errors will return when field validation fails  */}
-                {/* {errors.exampleRequired && <span>This field is required</span>} */}
+                <label className="form-label">Price</label>
+                <input type="number" {...register("price")} className="form-input" />
+                {errors.price && <p className="form-error">{errors.price.message}</p>}
 
-                <button>Submit</button>
+                <label className="form-label">Image</label>
+                <input type="file" name="image" onChange={handleImageChange} className="form-input" />
+                {preview && <img src={preview} alt="" width={"100px"} height={"100px"} />}
+
+                <button type="submit" className="form-button">Submit</button>
             </form>
         </div>
     )
