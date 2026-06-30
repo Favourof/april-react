@@ -3,6 +3,7 @@ import "./Form.css";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { privateInstance } from "../api/axios";
 
 
 export const AddProduct = () => {
@@ -43,8 +44,7 @@ export const AddProduct = () => {
 
 
     const onSubmit = async (data) => {
-        console.log(data);
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2YTBhZDNjNDdiZGE3MTdiMWVmM2RhMTYiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODE3NzI3MTAsImV4cCI6MTc4MjM3NzUxMH0.LAhTqOUU3M3nnYmiBAU7rDCP4nw-_uTO6cYcy4mbzgA"
+
         const formdata = new FormData()
 
         formdata.append("title", data.title)
@@ -53,21 +53,19 @@ export const AddProduct = () => {
         formdata.append("image", files)
 
         try {
-            const product = await fetch("http://localhost:4000/api/v1/product", {
-                method: "POST",
+            const product = await privateInstance.post("/product", formdata, {
                 headers: {
-                    "Authorization": `Bearer ${token}`
+                    "Content-Type": "multipart/form-data",
                 },
-                body: formdata
             })
 
             if (product) {
-                const res = await product.json()
-                console.log(res);
+                // const res = await product.json()
+                console.log("the res", product.data);
 
             }
         } catch (error) {
-            console.log(error);
+            console.log("the error", error.response);
 
         }
 

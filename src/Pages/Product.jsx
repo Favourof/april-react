@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react'
+import { publicInstance } from '../api/axios'
 
 export const Product = () => {
     const [products, setProducts] = useState([])
@@ -11,14 +12,13 @@ export const Product = () => {
             setLoading(true)
             setProductError("")
             // const response = await fetch('https://fakestoreapi.com/products')
-            const response = await fetch('http://localhost:4000/api/v1/product')
+            const response = await publicInstance.get("/product")
 
-            console.log(response);
 
-            if (response.ok) {
-                const resJson = await response.json()
-                setProducts(resJson.product)
-                console.log(products);
+
+            if (response) {
+                setProducts(response.data.product)
+                console.log(response);
             } else {
                 setProductError("Error while fetching Products")
             }
