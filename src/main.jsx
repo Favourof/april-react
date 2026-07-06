@@ -4,15 +4,20 @@ import './index.css'
 import './button.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeProvider.jsx'
+import { ThemeProvider } from './context/Theme/ThemeProvider.jsx'
+import { AuthProvider } from './context/Auth/AuthProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+
+          <App />
+
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
 
 
   </StrictMode>,

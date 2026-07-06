@@ -1,5 +1,6 @@
 import { useContext, useState } from "react"
-import { themeContext } from '../context/ThemeContext'
+import { themeContext } from "../context/Theme/ThemeContext"
+
 
 export const Home = () => {
   const [count, setCount] = useState(0);

@@ -13,6 +13,8 @@ import { Settings } from "./DashboardPages/Settings";
 import { Manage } from "./DashboardPages/Manage";
 import { Product } from "./Pages/Product";
 import { AddProduct } from "./DashboardPages/AddProduct";
+import { Login } from "./Pages/Login";
+import { Signup } from "./Pages/Signup";
 
 
 function App() {
@@ -20,12 +22,15 @@ function App() {
 
 
   return (
+
     <div>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/product" element={<Product />} />
 
@@ -33,7 +38,7 @@ function App() {
 
 
         <Route path="/dashboard" element={<Dashboard />} >
-          <Route index="/" element={<Chart />} />
+          <Route index element={<Chart />} />
           <Route path="history" element={<History />} />
           <Route path="payment" element={<Payment />} />
           <Route path="settings" element={<Settings />} />
